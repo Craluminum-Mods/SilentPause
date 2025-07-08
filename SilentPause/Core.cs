@@ -7,14 +7,35 @@ namespace SilentPause;
 
 public class Core : ModSystem
 {
+    private ICoreClientAPI clientAapi;
+    
     public override void StartClientSide(ICoreClientAPI api)
     {
-        api.Event.PauseResume += (isPaused) => Event_PauseResume(isPaused, api);
+        clientAapi = api;
+        ClientMain main = api.World as ClientMain;
+        main.Platform.RegisterOnFocusChange(OnFocusChanged);
+        api.Event.PauseResume += Event_PauseResume;
     }
 
-    private void Event_PauseResume(bool isPaused, ICoreClientAPI api)
+    public override void Dispose()
     {
-        Queue<ILoadedSound> sounds = (api.World as ClientMain)?.GetField<Queue<ILoadedSound>>("ActiveSounds");
+        clientAapi.Event.PauseResume -= Event_PauseResume;
+    }
+
+    private void OnFocusChanged(bool focus)
+    {
+        PauseOrResumeSounds(isPaused: focus);
+    }
+
+    private void Event_PauseResume(bool isPaused)
+    {
+        PauseOrResumeSounds(isPaused);
+    }
+
+    private void PauseOrResumeSounds(bool isPaused)
+    {
+        ClientMain main = clientAapi.World as ClientMain;
+        Queue<ILoadedSound> sounds = main.GetField<Queue<ILoadedSound>>("ActiveSounds");
         foreach (ILoadedSound sound in sounds)
         {
             if (isPaused)
