@@ -1,5 +1,6 @@
 {
   "type": "code",
+  "side": "client",
   "modid": "silentpause",
   "name": "Silent Pause",
   "authors": [ "Craluminum2413" ],
