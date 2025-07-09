@@ -24,7 +24,10 @@ public class Core : ModSystem
 
     private void OnFocusChanged(bool focus)
     {
-        PauseOrResumeSounds(isPaused: focus);
+        if (!clientAapi.IsGamePaused)
+        {
+            PauseOrResumeSounds(isPaused: focus);
+        }
     }
 
     private void Event_PauseResume(bool isPaused)

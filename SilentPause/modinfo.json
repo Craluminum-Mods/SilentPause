@@ -5,7 +5,7 @@
   "name": "Silent Pause",
   "authors": [ "Craluminum2413" ],
   "description": "Pauses all sounds when the game is paused or game window is unfocused",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "dependencies": {
   }
 }
